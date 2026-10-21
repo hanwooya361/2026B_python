@@ -40,3 +40,10 @@ def print_hello():
 
 call_10_items(print_hello())    # print_hello() 결과값 전달
 call_10_items(print_hello)      # print_hello 함수 정보 전달
+
+# 323p.
+# java: 리스트.stream.forEach(), 리스트.stream.map(), 리스트.stream.filter()
+# react: 리스트.forEach(), 리스트.map(), 리스트.filter()
+# python: for x in 리스트, map(코드, 리스트), filter(코드, 리스트)
+# forEach 단순반복(return x), map 반복+반환(return o), filter 반복+(참이면)반환
+
