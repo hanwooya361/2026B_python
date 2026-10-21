@@ -60,4 +60,36 @@ def print_n_times4(*values, n=2):
 print_n_times4("안녕하세요", "즐거운", "파이썬", n=3)   # 인수 전달시 매개변수명 지정 , 3번반복
 print_n_times4("안녕하세요", "즐거운", "파이썬", 3)     # 2번반복
 
-# 285p. 
+# 285p. 리턴이란? 함수가 종료되면서 반환 되는 값
+# 1] 자료없는 리턴
+def return_test():
+    print("A 위치입니다")
+    return 
+    print("B 위치입니다")
+return_test()
+# 2] 자료와 함께 리턴
+def return_test2():
+    return 100
+value = return_test2
+print(value)
+
+# 287p.
+def sum_all(start, end):
+    output = 0
+    for i in range(start, end+1) :
+        output += i
+    return output
+print(sum_all(0,100))
+print(sum_all(0,1000))
+print(sum_all(50,100))
+print(sum_all(500,1000))
+
+# 288p.
+def sum_alll(start=0, end=100, step=1):
+    output = 0
+    for i in range(start, end+1, step):
+        output += i
+    return output
+print(sum_alll(0,100,10))
+print(sum_alll(end=100))
+print(sum_alll(end=100 , step=2))
