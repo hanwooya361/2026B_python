@@ -11,7 +11,7 @@ print(tuple_test[0])
 print(tuple_test[1])
 print(tuple_test[2])
 # 3. 요소값 수정, 불가능
-tuple_test[0] = 40
+# tuple_test[0] = 40
 # 4. 요소 하나인 경우
 tuple_test2 = (273, )   # 뒤에 ,쉼표 없으면 일반값 취급
 print(tuple_test2)
@@ -22,7 +22,7 @@ a,b = 10,20
 print(a,b)
 # - 스왑 / 구조분해
 a,b = b,a
-print(a,v)
+print(a,b)
 # - 리액트(js)에서 비슷한 문법 존재 -> 구조분해
 c,d = [30,40]
 print(c,d)
@@ -38,7 +38,7 @@ def call_10_items(func):
 def print_hello():
     print("안녕하세요")
 
-call_10_items(print_hello())    # print_hello() 결과값 전달
+# call_10_items(print_hello())    # print_hello() 결과값 전달
 call_10_items(print_hello)      # print_hello 함수 정보 전달
 
 # 323p.
@@ -47,3 +47,26 @@ call_10_items(print_hello)      # print_hello 함수 정보 전달
 # python: for x in 리스트, map(코드, 리스트), filter(코드, 리스트)
 # forEach 단순반복(return x), map 반복+반환(return o), filter 반복+(참이면)반환
 
+# 예제
+def power(item):
+    return item * item
+def under_3(item):
+    return item < 3
+list_a = [1,2,3,4,5]
+output_a = map(power, list_a)
+print(list(output_a))
+output_b =filter(under_3, list_a)
+print(list(output_b))
+
+# 324p. 람다? 코드 줄이기
+# lamda 매개변수 : 리턴값
+# JAVA : () -> {}
+# JS: () => {}
+
+power = lambda x : x * x
+under_3 = lambda x : x < 3
+list_a = [1,2,3,4,5]
+output_a = map(power, list_a)
+print(list(output_a))
+# 인라인 람다
+output_a = map(lambda x: x*x, list_a)
