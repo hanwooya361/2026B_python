@@ -67,3 +67,5 @@ print(x.dtype)
 x = np.array([1.5, 2.5, 3.5], dtype=np.float32)
 y = x.astype(np.int32)
 print(y)
+
+# * 타입 지정 이유: 1] 메모리 효율성/속도 , 2] 텐서플로우/파이토치 라이브러리
