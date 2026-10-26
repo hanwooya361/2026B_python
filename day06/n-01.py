@@ -51,10 +51,19 @@ print(x.size)   # 요소/자료 개수
 print(x.ndim)   # 차원수 
 
 # 9] 배열의 데이터 타입, np.array(리스트/튜플, dtyp=np.타입명)
-# np.타입명(비트수)
+# np.타입명(비트수) , 32bit -> 4byte
+# np.bool_ : 언더바 주의
+# np.bytes_ : 영문 or 일부 특수 문자(아스키코드) 1바이트, 한글(UTF-8) 3바이트
 x = np.array([1,2,3], dtype=np.int32)
 print(x.dtype)
 x = np.array([1.0, 2.0, 3.0], dtype=np.float32)
 print(x.dtype)
 x = np.array([True, False, True], dtype=np.bool_)
 print(x.dtype)
+x = np.array(['apple', 'banana', 'cherry'], dtype=np.bytes_)
+print(x.dtype)
+
+# 10] 타입변환 , .astype(np.새로운타입)
+x = np.array([1.5, 2.5, 3.5], dtype=np.float32)
+y = x.astype(np.int32)
+print(y)
