@@ -9,8 +9,8 @@
 # 383p.
 list_number = [52, 273, 32, 72, 100]
 try:
-    num_input = int(input("정수입력: "))
-    print(list_number[num_input])
+    number_input = int(input("정수입력: "))
+    print(list_number[number_input])
     raise NotImplementedError 
 except ValueError as e :    # 타입변환 예외
     print(e)
@@ -18,3 +18,14 @@ except IndexError as e :    # 인덱스 예외
     print(e)
 except Exception as e :     
     print(e)
+
+# Global
+a = 10          # 전역스택
+def 함수():
+    global a
+    # 단순 전역변수 호출이면 global 생략 o
+    # 전역변수 수정하면 global 필수
+    a = a + 1   # UnboundLocalError
+    print(a)    # global 없어도 전역스택 호출 가능
+    b = 20      # 함수스택
+함수()
