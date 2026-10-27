@@ -48,10 +48,13 @@ print(len(위험고객))
 # [Step 5] 고객 등급 정규화 및 VVIP 선정 (Min-Max Normalization)
 #   - 구매 금액(`sales`) 데이터를 0과 1 사이의 값으로 정규화(Min-Max Scaling) 하세요. * 공식 : ( x - 최솟값 ) / ( 최댓값 - 최솟값 )
 #   - 정규화된 값이 0.9 이상(상위 10% 수준)인 고객을 'VVIP'로 정의하고, 해당 VVIP 고객들의 모든 정보(Row 전체)를 추출하여 출력하세요.
+# -- 추출된 VVIP 고객 데이터를 '구매 금액(4번 열)' 기준 내림차순(높은 금액 순)으로 정렬하여 상위 5명의 정보를 출력하세요.
 min = np.min(sales)
 max = np.max(sales)
 scaling = (sales - min) / (max - min)
 vvip = (scaling >= 0.9)
 vvip_customer = data[vvip]
-print(vvip_customer)
+정렬 = np.argsort(-vvip_customer[:,4])
+vvip정렬 = vvip_customer[정렬]
+print(vvip정렬[:5])
 # ==============================================================================
