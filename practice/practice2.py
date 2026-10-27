@@ -54,7 +54,7 @@ max = np.max(sales)
 scaling = (sales - min) / (max - min)
 vvip = (scaling >= 0.9)
 vvip_customer = data[vvip]
-정렬 = np.argsort(vvip_customer[:,-1])
+정렬 = np.argsort(vvip_customer[:,4][::-1])
 vvip정렬 = vvip_customer[정렬]
 print(vvip정렬[:5])
 # ==============================================================================
