@@ -99,3 +99,18 @@ new_df = pd.merge(df_info, df_score, on='ID', how='inner')
 print(new_df)
 new_df = pd.merge(df_info, df_score, on='ID', how='outer')
 print(new_df)   # NaN: 정의가없는 자료
+
+# 15] 정렬, df.sort_value(by='컬럼명', ascending=True오름차순False내림차순)
+df = pd.DataFrame({
+  'name': ['Ant', 'Bee', 'Cat', 'Dog'],
+  'age': [27, 27, 22, 32],
+  'score': [88, 95, 85, 90]
+})
+new_df = df.sort_values(by='age', ascending=True)
+print(new_df)
+# 다중정렬은 [] 리스트 사용 , *age기준으로 1차 정렬 후 동일한 age끼리 score기준으로 2차정렬
+new_df = df.sort_values(by=['age','score'], ascending=[True,False])
+print(new_df)
+# 컬럼명도 정렬 가능. axis=0행/1열
+new_df = df.sort_index(axis=1, ascending=True)
+print(new_df)
