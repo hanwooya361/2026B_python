@@ -47,4 +47,11 @@ sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm")
 plt.title("상관관계 히트맵")
 plt.show()
 
-# 4] 산점도
+# 4] 산점도, sns.scatterplot(data=데이터프레임, x="수치컬럼명", y="수치컬렴명", hue="그룹명")
+sns.scatterplot(data=df, x="나이", y="소득", hue="이탈여부")
+plt.title("나이 vs 소득 산점도")
+plt.show()
+
+# 5] 페어플롯, sns.pairplot(data=데이터프레임, hue="타겟")
+sns.pairplot(data=df, hue="이탈여부", palette="Set1")
+plt.show()
