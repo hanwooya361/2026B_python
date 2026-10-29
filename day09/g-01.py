@@ -60,3 +60,14 @@ data_with_outliers = np.append(heights, [210, 215, 120])
 # 1) 박스플롯, plt.boxplot(값) , 데이터들을 사분위수(25% 50% 75%) 표현
 plt.boxplot(data_with_outliers)
 plt.show()
+
+# 6] 한 창에 2개 이상 그래프 표현
+# fig, axs = plt.subplots(행개수, 열개수, figsize=(가로,세로))
+fig, axs = plt.subplots(1, 2, figsize=(10,4))  # 1줄 차트 2개
+# 1행1열 차트 , axs[인덱스].차트종료(),  set_  set언더바.title, xlabel 등
+axs[0].plot([1,2,3],[4,5,6])
+axs[0].set_title("서브1:선그래프")
+# 1행2열 차트   
+axs[1].bar(['A','B','C'],[30,15,40])
+axs[1].set_title("서브2:막대그래프")
+plt.show()
