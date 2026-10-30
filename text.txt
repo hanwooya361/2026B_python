@@ -19,3 +19,4 @@ Pandas: 데이터 분석 및 처리 라이브러리 , 기능: 데이터 정제, 
 NumPy                         vs            Pandas
 ndarray(N차원 배열)                     Series(1차원,인덱스포함), DataFrame(2차원,table형태)
 인덱스 없음(위치기반)                   라벨(인덱스) 기반접근
+print(numpy.array([1],[2])*numpy.array([3],[4]) )
