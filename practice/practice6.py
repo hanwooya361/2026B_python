@@ -75,13 +75,13 @@ plt.show()
 # 4-1 (병합): pd.concat을 사용하여 분리된 월별 데이터를 하나로 통합하고 인덱스를 재부여한다.
 df = pd.concat([data1, data2], axis=0, ignore_index=True)
 # 4-2 (정제): 결측치의 문자열 표현('\N')을 None으로 치환하고, 성별 데이터를 대문자로 통일 및 결측치를 'U'로 보정한다.
-df = df.replace("\\n" : None, "" : None)
+df = df.replace({"\\N": None, "": None})
 df["성별"] = df["성별"].str.upper().fillna("U")
 # 4-3 (형변환): 이용시간, 거리 등 주요 수치형 변수는 pd.to_numeric으로 변환하고, 날짜 데이터는 pd.to_datetime으로 객체화한다.
 df["반납일시"] = pd.to_datetime(df["반납일시"])
 df["대여일시"] = pd.to_datetime(df["대여일시"])
-df["이용시간(분)"] = pd.to_numeric(df["이용시간(분)"])
-df["이용거리(M)"] = pd.to_numeric(df["이용거리(M)"])
+df["이용시간(분)"] = pd.to_numeric(df["이용시간(분)"], errors="coerce").fillna(0)
+df["이용거리(M)"] = pd.to_numeric(df["이용거리(M)"], errors="coerce").fillna(0)
 # 4-4 (파생변수): 대여일시에서 시간(Hour) 정보를 추출하여 '대여 시간대' 열을 새롭게 생성한다.
 df["대여시간대"] = df["대여일시"].dt.hour
 
@@ -100,6 +100,7 @@ top10 = df["대여 대여소명"].value_counts().head(10)
 sns.barplot(x=top10.index , y=top10.values, color="red")
 plt.show()
 # 5-4 (상관관계): sns.heatmap을 통해 이용시간, 이용거리, 시간대 등 수치 데이터 간의 밀접도를 분석한다.
+수치형자료들 = df.select_dtypes(include="number")   # 수치형데이터만 추출
 numeric_df = df[["이용시간(분)", "이용거리(M)", "대여시간대"]]
 corr_matrix = numeric_df.corr()
 sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm")
