@@ -20,5 +20,5 @@ for page in range(1,4) :
         price = book.select_one(".yes_b").get_text()
         auth = book.select_one(".info_auth").get_text().strip().replace("\n","").replace("\r","")
     # 6) 리스트에 담기
-    book_list.append({"제목":title, "가격":price, "저자":auth})
+        book_list.append({"제목":title, "가격":price, "저자":auth})
 print(book_list)
