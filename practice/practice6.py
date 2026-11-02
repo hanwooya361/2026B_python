@@ -22,16 +22,26 @@ data2 = pd.read_csv('./서울특별시 공공자전거 대여이력 정보_2502.
 # 수치형 결측치 보정: '나이(Age)' 컬럼의 결측치는 이상치에 강건한(Robust) 분석을 위해 중앙값(Median)으로 대체해야 한다.
 # 범주형 결측치 보정: '승선 항구(Embarked)' 컬럼의 결측치는 가장 빈번하게 등장하는 최빈값(Mode)으로 대체해야 한다.
 age_df = df['Age'].median()
-embarked_df = df['Embarked'].mode()[0]
+embarked_df = df['Embarked'].fillna((df['Embarked'].mode()[0]))
 # [5. 데이터 시각화 및 분석]
 # 5-1 : 생존 분포 분석: 전체 생존자와 사망자의 비중을 파악할 수 있는 막대그래프 를 생성한다.
+# 0 = No(사망자), 1 = Yes(생존자)
+sns.countplot(data=df, x='Survived')
+plt.xticks([0,1], ["사망", "생존"])
+plt.show()
+
 counts = df["Survived"].value_counts().sort_index()
 bars = plt.bar(["사망(0)", "생존(1)"], counts, width=0.5)
 plt.bar_label(bars, padding=3, fontsize=8)
 plt.title("생존 분포 분석")
 plt.show()
 # 5-2 : 연령대별 상세 분석:나이에 따른 생존/사망 분포를 히스토그램으로 시각화한다.데이터의 흐름을 파악할 수 있도록 커널 밀도 추정 곡선(KDE)을 포함한다.
-
+사망자나이 = (df[df['Survived'] == 0]['Age'])
+생존자나이 = (df[df['Survived'] == 1]['Age'])
+sns.histplot(data=사망자나이)
+sns.histplot(data=생존자나이)
+plt.legend()
+plt.show()
 # 5-4 (성별): sns.countplot을 사용하여 성별(Sex)에 따른 생존 여부(Survived)별 인원수를 시각화한다.
 sns.countplot(data=df, x="Sex", hue="Survived", palette="Set1", edgecolor="black")
 plt.title("성별에 따른 생존 여부별 인원수")
@@ -65,7 +75,7 @@ plt.show()
 # 4-1 (병합): pd.concat을 사용하여 분리된 월별 데이터를 하나로 통합하고 인덱스를 재부여한다.
 df = pd.concat([data1, data2], axis=0, ignore_index=True)
 # 4-2 (정제): 결측치의 문자열 표현('\N')을 None으로 치환하고, 성별 데이터를 대문자로 통일 및 결측치를 'U'로 보정한다.
-df.replace(r"\N", None)
+df = df.replace("\\n" : None, "" : None)
 df["성별"] = df["성별"].str.upper().fillna("U")
 # 4-3 (형변환): 이용시간, 거리 등 주요 수치형 변수는 pd.to_numeric으로 변환하고, 날짜 데이터는 pd.to_datetime으로 객체화한다.
 df["반납일시"] = pd.to_datetime(df["반납일시"])
