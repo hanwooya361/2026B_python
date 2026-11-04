@@ -36,9 +36,27 @@ print(model.coef_)  # [30.43452394]
 print(model.intercept_) # -477.30634978973194
 # 9) 학습한 모델 예측, 새로운 x값을 넣어서 y값 구하기, model.predict(2차원특성자료)
 print(model.predict([[30]]))    # if 물고기 길이가 30일때 무게 예측
-# *) 단순회귀모델: y=ax+b, a=[30.43452394]*[30] + [-477.30634978973194]
+# *) 단순회귀모델: y=ax+b, a=[30.43452394]*[30] + [-477.30634978973194] = [435.72936841]
+# *) 시각화
+import matplotlib.pyplot as plt
+plt.scatter(X_train, Y_train)   # 학습 자료들의 점
+plt.scatter([30], model.predict([[30]]), color="red")   # 임의의 예측 점
+plt.plot([0,100], model.predict([[0],[100]]), color="blue") # 회귀선: 임의의 최솟/최댓값
+plt.show()
+# 11) 문제점
+# x,y가 직선 관계이며 실 자료들은 꼭 비례 증가가 아닐 수 있다.
+# 해결:  다항 회귀로 확장해 특성 추가
 
+# 12) 모델 평가, 테스트용자료 사용
+Y_pred = model.predict(X_test)  # 테스트용 특성을 넣어 테스트 예측 결과
+# 평균 제곱근 오차계산
+import numpy as np  # sqrt(제곱근) 넘파이 함수 사용
+from sklearn.metrics import mean_squared_error  # 평균 오차(학습자료와 테스트자료)
+rmse = np.sqrt(mean_squared_error(Y_test, Y_pred))
+print("rmse:", rmse)    # rmse: 160.01413830813442  
+# 모델이 실제 무게와 얼마나 틀렸는지 평균 오차
 
-
-
-
+# 결정계수(R SCORE): 타깃 데이터의 전체 변동성 대비 모델이 얼마나 잘 설명하는지 0~1 비율
+from sklearn.metrics import r2_score    # 결정계수 라이브러리
+r2 = r2_score(Y_test, Y_pred)    # 정답지와 예측값
+print("r2:", r2)    # r2: 0.8199897860284712  , 82%
