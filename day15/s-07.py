@@ -24,3 +24,44 @@ Y_pred_proba = model.predict_proba(X_test_scaled)
 import numpy as np
 print( np.round(Y_pred_proba[:3]), 3 )  # np.round(리스트, 자릿수)
 print(model.classes_)
+
+# 평가지표
+# average="macro": 클래스마다 개수 다 다르므로 산술평균 값으로 계산
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+# 1) 정확도: 전체 예측 건수 중 맞힌 정답의 비율
+# 클래스내 개수들이 비율/불균형이면 점수가 왜곡 발생
+print(accuracy_score(Y_test, Y_pred))   
+# 2) 정밀도: 예측 한 것 중 실제로 맞힌 비율
+print(precision_score(Y_test, Y_pred, average="macro"))
+# 3) 재현율: 실제 정답인 것 중에 모델이 놓치지않고 찾아낸 비율
+print(recall_score(Y_test, Y_pred, average="macro"))
+# 4) f1점수 / 표준: : 정밀도와 재현율 간의 조화 조정하기 위한 조화평균
+print(f1_score(Y_test, Y_pred, average="macro"))
+# 4대평가지표는 혼동행렬을 이용해 계산
+# 혼동행렬 시각화
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay, classification_report
+ConfusionMatrixDisplay.from_predictions(Y_test, Y_pred)
+plt.show()
+## 리포트(평가 지도 보고서)
+print(classification_report(Y_test, Y_pred))
+
+# 파이프라인 구성
+from sklearn.pipeline import Pipeline
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('model', LogisticRegression(max_iter=1000, random_state=42))
+])
+# 하이퍼 파라미터 후보군, 식별자__매개변수명" : [후보값, 후보값]
+param_grid = {"model__C": [0.01, 0.1, 1.0, 10.0, 100.0]}
+# K폴드 이용한 교차 검증 분할기(다중분류: StratifiedKFold )
+from sklearn.model_selection import KFold, StratifiedKFold, GridSearchCV
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+# 그리드서치
+grid = GridSearchCV(pipe, param_grid, cv=cv, scoring="f1_macro", n_jobs=-1)
+grid.fit(X_train, Y_train)
+print(grid.best_params_)    # 최적의 규제
+print(grid.best_score_)     # 최고의 f1점수
+best_model = grid.best_estimator_   # 최적의 추정기/모델
+Y_pred = best_model.predict(X_test) # 최적의 추정기로 예측
+print(classification_report(Y_test, Y_pred))    # 파이프라인으로 최적의 모델 탐색해 보고서 출력
