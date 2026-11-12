@@ -13,6 +13,12 @@ class ItemService :
         # df.to_dict(orient="records") 
         # 행마다 딕셔너리 반환해 리스트 반환
         return self.df.to_dict(orient="records")
+    def save(self, item):
+        # 1. 저장할 딕셔너리를 df로 변경
+        saveDf = pd.DataFrame([item])
+        # 2. 기존 df에 연결, pd.concat([df1,df2]) 
+        self.df = pd.concat([self.df, saveDf], ignore_index=True)
+        return True
 ###############################################################
 # 서비스 객체 생성 
 item_service = ItemService() 

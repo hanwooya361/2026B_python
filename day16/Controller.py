@@ -11,3 +11,7 @@ from Service import item_service
 async def items():
     # 서비스내 함수 호출
     return item_service.items()
+# 2) 저장
+@router.post("/save")
+async def save(item:dict):
+    return item_service.save(item)
