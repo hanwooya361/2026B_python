@@ -6,12 +6,28 @@ router = APIRouter(prefix="/api")
 # [3] 다양한 REST API CRUD
 # 서비스 불러오기
 from Service import item_service
+
 # 1) 전체조회
 @router.get("/items")
 async def items():
     # 서비스내 함수 호출
     return item_service.items()
+
 # 2) 저장
+# http://127.0.0.1:8000/docs
+# {"id":3, "name":"조현우", "price":5000}
 @router.post("/save")
 async def save(item:dict):
     return item_service.save(item)
+
+# 3) 수정
+# http://127.0.0.1:8000/docs
+# {"id":1, "name":"펩시콜라", "price":3000}
+@router.put("/update")
+async def update(item:dict):
+    return item_service.update(item)
+
+# 4) 삭제
+@router.delete("/delete")
+async def delete(id:int):
+    return item_service.delete(id)
