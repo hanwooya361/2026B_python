@@ -1,7 +1,6 @@
 import pandas as pd
 df = pd.read_csv('./project/Student_Performance.csv', encoding='utf-8-sig')
 df.columns = ['study_hours', 'previous_score', 'extracurricular', 'sleep_hours', 'papers_practiced', 'performance_index']
-df['extracurricular'] = df['extracurricular'].map({'Yes':1, 'No':0})
 feature = ['study_hours', 'previous_score', 'extracurricular', 'sleep_hours', 'papers_practiced']
 target = 'performance_index'
 X = df[feature]
@@ -10,9 +9,16 @@ Y = df[target]
 # 분할
 from sklearn.model_selection import train_test_split, GridSearchCV
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42) 
+num_features = ['study_hours', 'previous_score', 'sleep_hours', 'papers_practiced']
+cat_features = ['extracurricular']
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, PolynomialFeatures
+pp = ColumnTransformer(transformers=[
+    ('num', StandardScaler(), num_features),
+    ('cat', OneHotEncoder(drop='first', sparse_output=False), cat_features)
+])
 
 # 다항 특성 확장 표준화
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 poly = PolynomialFeatures(include_bias=False, degree=2)
 poly.fit(X_train)
 X_train_poly = poly.transform(X_train)
@@ -32,11 +38,7 @@ print("Train R2:", ridge.score(X_train_scaled, Y_train))
 print("Test R2:", ridge.score(X_test_scaled, Y_test))
 
 from sklearn.pipeline import Pipeline
-pipe_model = Pipeline([
-    ('poly', PolynomialFeatures(degree=2, include_bias=False)),
-    ('scaler', StandardScaler()),
-    ('ridge', Ridge(random_state=42))
-])
+pipe_model = Pipeline([('pp', pp), ('ridge', Ridge(random_state=42))])
 pipe_model.fit(X_train, Y_train)
 param_grid = {
     'poly__degree' : [1,2],
