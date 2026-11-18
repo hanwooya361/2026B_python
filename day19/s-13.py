@@ -165,3 +165,38 @@ X_train['PC1'] = X_train_pca[ : , 0 ]
 X_train['PC2'] = X_train_pca[ : , 1 ]
 X_train['PCA_cluster'] = pca_pred
 print(X_train[['PC1', 'PC2', 'PCA_cluster']].head(5))   
+# 클러스터2는 상(PC1에서 강한 양수 이므로) 
+# 클러스터1는 하(PC1에서 음의 양수 이므로) 
+# 클러스터0는 중(PC1에서 0에 가까운 평균 이므로) 
+
+# 7) 이상치 제외한 G3 평균 계산
+normal_clusters = X_train[X_train['PCA_cluster']!=-1]   # 예상치 제외
+# pd.groupby('성별')['국어점수'].mean(): 성별끼리 국어점수열에 평균구하기
+cluster_means = normal_clusters.groupby('PCA_cluster')['G3'].mean()
+sorted_cluster = cluster_means.sort_values(ascending=True)   # 오름차순
+print(sorted_cluster)
+# PCA_cluster
+# 1     9.873239
+# 0    12.500000
+# 2    13.641509
+
+# 8) 라벨링
+# enumerate(),  range()
+labels = {}
+for idx, cluster_id in enumerate(sorted_cluster.index, start=1):
+    labels[cluster_id] = f'Level{idx}'
+labels[-1] = 'Outlier'  # 이상치는 리스트 가장 뒤에
+print(labels)
+# {1: 'Level1', 0: 'Level2', 2: 'Level3', -1: 'Outlier'}
+X_train['pca_cluster_label'] = X_train['PCA_cluster'].replace(labels)
+print(X_train)  # 군집화한 결과가지고 추후에 지도학습
+# 지도학습에서 성능 향상 하기 위한 방법: 0) 전처리,  1) 하이퍼파라미터, 2) 파생변수
+
+# 9) 시각화 
+for lbl in list(labels.values()):
+    sub = X_train[X_train['pca_cluster_label']==lbl]
+    if lbl == 'Outlier' :
+        plt.scatter(sub['PC1'], sub['PC2'], c='red', marker='*', label=lbl)
+    else :
+        plt.scatter(sub['PC1'], sub['PC2'], marker='o', label=lbl)
+plt.show()
