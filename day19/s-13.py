@@ -144,7 +144,7 @@ plt.scatter(X_train.loc[noise_mask, 'G3'], X_train.loc[noise_mask, 'absences'], 
 plt.show()
 
 # 6) PCA(주성분 분석): 고차원 데이터의 분산을 저차원으로 축소해 주 성분/특성만 
-# 고차원이란? 다수의 특성들의 가중치/기울기 표현
+# 고차원이란? 다수의 특성들의 가중치/기울기 표현, 상관계수? A특성과B특성의 관계성
 from sklearn.decomposition import PCA
 # PCA(n_components=차원수)
 pca = PCA(n_components=2)   # 시각화 하기위한 2차원 축소
@@ -200,3 +200,5 @@ for lbl in list(labels.values()):
     else :
         plt.scatter(sub['PC1'], sub['PC2'], marker='o', label=lbl)
 plt.show()
+# PCA 시각화하게되면 특성들을 2가지 형태 표현 가능하다
+# 현재 주성분 PC1(G1 G2 G3), PC2(공부시간, 결석일수)
