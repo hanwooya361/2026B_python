@@ -84,5 +84,31 @@ print(model.score(X_train_tfidf, Y_train)) # 0.89025
 print(model.score(X_test_tfidf, Y_test))   # 0.816
 Y_pred = model.predict(X_test_tfidf)
 print('f1:', f1_score(Y_test, Y_pred))     # f1: 0.8087318087318087
-# 9.
-print(X_train_tfidf.toarray()[0][:10])
+print(X_train_tfidf.toarray()[0][:10])  # 수치행렬
+
+# 9. 예측하기
+new_reviews = [
+    "배송도 정말 빠르고 가성비 최고입니다! 재구매 의사 있어요.",
+    "마감 상태가 엉망이고 실밥이 다 터져서 왔네요. 최악입니다.",
+    "그냥 가격만큼 하는 것 같아요. 특별히 좋지도 나쁘지도 않음."
+]
+# 정규표현식
+cleaned_new = []
+for text in new_reviews:
+    text = re.sub( r'[^가-힣a-zA-Z0-9\s]',' ', str(text) )
+    cleaned_new.append(''.join(text.split()))
+# 정규표현식 이후 토큰나이즈
+new_tfidf = tfidf.transform(cleaned_new)
+# 토큰나이즈 이후 모델추론
+probs = model.predict_proba(new_tfidf)  # predict 추론, predict_proba 추론확률
+# 0.6이상이면 긍정, 0.4 이하면 부정 그외 중립
+for i in range(len(new_reviews)): # 리뷰 수 만큼 반복
+    pos = probs[i][1] # i번째 추론 결과 확률(0:부정 1:긍정)
+    if pos >= 0.6 :
+        contents = "긍정"
+    elif pos <= 0.4 :
+        contents = "부정"
+    else :
+        contents = "중립"
+    print(f'리뷰: , {new_reviews[i]}')
+    print(f'감정분석: , {contents}, 긍정확률:{pos}, 부정확률:{probs[i][0]}')
